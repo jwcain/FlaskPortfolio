@@ -2,16 +2,14 @@
 <title>{% block title %}{% endblock %}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
-  <h1>Portfolio</h1>
+  <h1><a href="{{ url_for('portfolio.index') }}">Portfolio</a></h1>
   <ul>
     <li><a href="{{ url_for('portfolio.projects') }}">Projects</a>
-    <li><a href="{{ url_for('portfolio.resume') }}">Resume</a>
+    <li><a href="{{ url_for('portfolio.projects') }}">Projects</a>
+    <li><a href="{{ url_for('portfolio.resume') }}" target="_blank">Resume</a>
     <li><a href="{{ url_for('portfolio.recipes') }}">Recipes</a>
-    <li><a href="https://www.linkedin.com/in/cainj">LinkedIn</a>
-    <li><a href="https://github.com/jwcain">GitHub</a>
-      {% if g.user %}
-      <li><a href="{{ url_for('auth.logout') }}">Admin Log Out</a>
-    {% endif %}
+    <li><a href="https://www.linkedin.com/in/cainj" target="_blank">LinkedIn</a>
+    <li><a href="https://github.com/jwcain" target="_blank">GitHub</a>
   </ul>
 </nav>
 <section class="content">
@@ -23,3 +21,9 @@
   {% endfor %}
   {% block content %}{% endblock %}
 </section>
+{% if g.user %}
+<footer>
+<li><a href="{{ url_for('auth.changepassword') }}">Admin Change Password</a>
+<li><a href="{{ url_for('auth.logout') }}">Admin Log Out</a>
+</footer>
+{% endif %}
