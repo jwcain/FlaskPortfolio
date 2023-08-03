@@ -1,0 +1,18 @@
+[project]
+name = "JustinWCainPortfolio"
+version = "1.0.0"
+description = "Justin Cain's portfolio website"
+dependencies = [
+    "flask",
+]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["JustinWCainPortfolio"]
