@@ -4,6 +4,7 @@ from JustinWCainPortfolio.db import get_db
 
 
 def test_login(client, auth):
+    assert client.get('/login', follow_redirects=True).status_code == 200
     assert client.get('/auth/login').status_code == 200
     response = auth.login()
     assert response.headers["Location"] == "/"

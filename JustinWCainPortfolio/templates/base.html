@@ -2,12 +2,13 @@
 <title>{% block title %}{% endblock %}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
-  <h1>Porfolio</h1>
+  <h1>Portfolio</h1>
   <ul>
-    {% if g.user %}
-      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
-    {% else %}
-      <li><a href="{{ url_for('auth.login') }}">Admin Log In</a>
+    <li><a href="{{ url_for('auth.logout') }}">Projects</a>
+    <li><a href="{{ url_for('portfolio.resume') }}">Resume</a>
+    <li><a href="{{ url_for('auth.logout') }}">Recipes</a>
+      {% if g.user %}
+      <li><a href="{{ url_for('auth.logout') }}">Admin Log Out</a>
     {% endif %}
   </ul>
 </nav>

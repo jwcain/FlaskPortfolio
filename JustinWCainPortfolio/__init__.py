@@ -1,7 +1,10 @@
 import os
 
-from flask import Flask 
+from markupsafe import Markup 
+from flask import Flask, send_file, url_for, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
+
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -34,4 +37,9 @@ def create_app(test_config=None):
     app.register_blueprint(portfolio.bp)
     app.add_url_rule('/', endpoint='index')
 
+    @app.route('/login')
+    def login_shorthand():
+        return redirect(url_for('auth.login'))
+
+    app.jinja_env.globals['include_raw'] = lambda filename : Markup(app.jinja_loader.get_source(app.jinja_env, filename)[0])
     return app

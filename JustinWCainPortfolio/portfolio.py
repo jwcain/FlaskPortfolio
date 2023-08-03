@@ -14,3 +14,7 @@ def index():
     db = get_db()
 
     return render_template('portfolio/index.html')
+
+@bp.route('/resume')
+def resume():
+    return redirect(url_for('static', filename='JustinWCain_Resume.pdf'))
