@@ -26,19 +26,6 @@ VALUES
 
 INSERT INTO project (shown, programming_language, tools_used, title, info, link_github, link_live, last_updated)
 VALUES
-    (1, 'Python', 'Flask','Portfolio Website','Portfolio to show off my skills','githublink/index', '', '2023-08-01 00:00:00'),
-    (1, 'C#','Unity', 'Hexquisite', 'A hexagonal block puzzle game.','githublink/hexquisite', 'hex.play/live', '2023-08-01 05:00:55'),
-    (0, 'Java','', 'Java Tutorial Project', 'stadnard java tutorial','', '', '2017-08-01 05:00:55');
-
-INSERT INTO work_experience (shown, title, one_liner, dates, work_location)
-VALUES
-    (1,'Python Developer', 'Developed a flask-based website','July 23 - Aug-23', 'Home'),
-    (0,'Baker', 'Baked the best peanut butter cookies','Everyday', 'Everywhere');
-
-INSERT INTO work_experience_point (work_experience_id, info)
-VALUES
-    (1,'Learned Flask'),
-    (1,'Converted Portfolio'),
-    (1,'Webdev is fun!'),
-    (0,'Made way too many cookies'),
-    (0,'I am also good at cheesecake');
+    (1, 'Python', 'Flask','Portfolio Website','Portfolio to show off my skills','githublink/index', '', '2023-08-01'),
+    (1, 'C#','Unity', 'Hexquisite', 'A hexagonal block puzzle game.','githublink/hexquisite', 'hex.play/live', '2023-08-01'),
+    (0, 'Java','', 'Java Tutorial Project', 'stadnard java tutorial','', '', '2017-08-01');

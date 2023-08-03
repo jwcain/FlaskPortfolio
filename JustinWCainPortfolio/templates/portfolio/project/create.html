@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Project{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="title">Title</label><input name="title" id="title" value="{{ request.form['title'] }}" required>
+    <label for="shown">Shown</label><input type="checkbox" name="shown" id="shown" value="{{ request.form['shown'] }}" required>
+    <label for="programming_language">Language</label><input name="programming_language" id="programming_language" value="{{ request.form['programming_language'] }}">
+    <label for="tools_used">Tools</label><input name="tools_used" id="tools_used" value="{{ request.form['tools_used'] }}">
+    <label for="link_github">Github</label><input name="link_github" id="link_github" value="{{ request.form['link_github'] }}">
+    <label for="link_live">Live Link</label><input name="link_live" id="link_live" value="{{ request.form['link_live'] }}">
+    <label for="last_updated">Last Updated</label><input type="date" name="last_updated" id="last_updated" value="{{ request.form['last_updated'] }}">
+    <label for="info">Info</label>
+    <textarea name="info" id="info">{{ request.form['info'] }}</textarea>
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}

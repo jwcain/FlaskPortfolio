@@ -16,12 +16,15 @@ def test_login(client, auth):
         assert g.user['username'] == 'admin'
 
 
+
 @pytest.mark.parametrize(('password', 'message'), (
     ('WrongPassword', b'Incorrect password.'),
 ))
 def test_login_validate_input(auth, password, message):
     response = auth.login(password)
     assert message in response.data
+
+
 
 @pytest.mark.parametrize('path', (
     '/auth/changepassword',
@@ -31,6 +34,8 @@ def test_login_required(client, auth, path):
     response = client.post(path)
     assert response.headers["Location"] == "/auth/login"
 
+
+
 @pytest.mark.parametrize('path', (
     '/auth/changepassword',
 ))
@@ -38,6 +43,7 @@ def test_login_access(client, auth, path):
     auth.login()
     response = client.get(path)
     assert not hasattr(response, "Location")
+
 
 @pytest.mark.parametrize(('currentpassword','newpassword', 'confirmpassword', 'message'), (
     ('adminpass', 'newpass', 'newpass', 'Redirecting...'), #Successfull change causes a redirect to index

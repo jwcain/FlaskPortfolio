@@ -3,8 +3,6 @@ DROP TABLE IF EXISTS recipe;
 DROP TABLE IF EXISTS recipe_step;
 DROP TABLE IF EXISTS recipe_ingredient;
 DROP TABLE IF EXISTS project;
-DROP TABLE IF EXISTS work_experience;
-DROP TABLE IF EXISTS work_experience_point;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,21 +44,5 @@ CREATE TABLE project (
   info TEXT NOT NULL,
   link_github TEXT NOT NULL,
   link_live TEXT NOT NULL,
-  last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE work_experience (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  shown BOOLEAN NOT NULL,
-  title TEXT NOT NULL,
-  one_liner TEXT NOT NULL,
-  dates TEXT NOT NULL,
-  work_location TEXT NOT NULL
-);
-
-CREATE TABLE work_experience_point (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  work_experience_id INTEGER NOT NULL,
-  info TEXT NOT NULL,
-  FOREIGN KEY (work_experience_id) REFERENCES work_experience (id)
+  last_updated DATE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
