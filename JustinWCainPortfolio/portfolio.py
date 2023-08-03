@@ -6,11 +6,11 @@ from werkzeug.exceptions import abort
 from JustinWCainPortfolio.auth import login_required
 from JustinWCainPortfolio.db import get_db
 
-bp = Blueprint('index', __name__)
+bp = Blueprint('portfolio', __name__)
 
 
 @bp.route('/')
 def index():
     db = get_db()
 
-    return render_template('index.html')
+    return render_template('portfolio/index.html')
