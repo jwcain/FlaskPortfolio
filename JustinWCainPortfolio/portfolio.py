@@ -18,3 +18,11 @@ def index():
 @bp.route('/resume')
 def resume():
     return redirect(url_for('static', filename='JustinWCain_Resume.pdf'))
+
+@bp.route('/projects')
+def projects():
+    return render_template('portfolio/projects.html')
+
+@bp.route('/recipes')
+def recipes():
+    return render_template('portfolio/recipes.html')
