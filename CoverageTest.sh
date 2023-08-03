@@ -1,4 +1,3 @@
 coverage run -m pytest
-coverage report
 coverage html
-read
+explorer '.\htmlcov\index.html'
