@@ -20,6 +20,7 @@ def login_required(view):
     return wrapped_view
 
 
+
 @bp.route('/changepassword', methods=('GET', 'POST'))
 @login_required
 def changepassword():

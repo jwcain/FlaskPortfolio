@@ -18,7 +18,7 @@
     <input type="submit" value="Update">
   </form>
   <hr>
-  <form action="{{ url_for('portfolio.delete', id=project['id']) }}" method="post">
+  <form action="{{ url_for('portfolio.delete_project', id=project['id']) }}" method="post">
     <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
   </form>
 {% endblock %}

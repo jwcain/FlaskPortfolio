@@ -34,11 +34,15 @@ def projects():
 
 @bp.route('/recipes')
 def recipes():
-    return render_template('portfolio/recipes.html')
+    db = get_db()
+    recipes = db.execute(
+    'SELECT * FROM recipe'
+    ).fetchall()
+    return render_template('portfolio/recipes.html', recipes=recipes)
 
 @bp.route('/project/create', methods=('GET', 'POST'))
 @login_required
-def create():
+def create_project():
     if request.method == 'POST':
         shown = request.form['shown']
         programming_language = request.form['programming_language']
@@ -85,7 +89,7 @@ def get_project(id):
 
 @bp.route('/project/update/<int:id>', methods=('GET', 'POST'))
 @login_required
-def update(id):
+def update_project(id):
     project = get_project(id)
     if request.method == 'POST':
         shown = 'shown' in request.form
@@ -120,7 +124,7 @@ def update(id):
 
 @bp.route('/project/toggle/<int:id>')
 @login_required
-def toggle(id):
+def toggle_project(id):
     db = get_db()
     project = get_project(id)
     shown = project['shown']
@@ -134,7 +138,7 @@ def toggle(id):
 
 @bp.route('/project/delete/<int:id>', methods=('POST',))
 @login_required
-def delete(id):
+def delete_project(id):
     get_project(id)
     db = get_db()
     db.execute('DELETE FROM project WHERE id = ?', (id,))

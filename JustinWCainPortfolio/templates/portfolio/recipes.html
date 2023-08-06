@@ -1,1 +1,20 @@
 {% extends 'base.html' %}
+
+{% block content %}
+  {% for recipe in recipes %}
+    <article class="recipeslist">
+      <header>
+        <div>
+          <h1>{{ recipe['title'] }}</h1>
+          {% if g.user %}
+              <a class="action" href="{{ url_for('portfolio.update', id=recipe['id']) }}">Edit</a>
+          {% endif %}
+        </div>
+      </header>
+      <div class="about">{{ recipe['summary'] }}</div>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

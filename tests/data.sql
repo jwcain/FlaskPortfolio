@@ -3,10 +3,10 @@ VALUES
     ('admin', 'pbkdf2:sha256:600000$5vVJL77wWCNXHZzI$891572b56d661c3980ec96c95a18a0818b7339046815e9dfaf9aee38d505cc4b');
 
 
-INSERT INTO recipe (title, info)
+INSERT INTO recipe (title, summary, info)
 VALUES
-    ('Water Soup', 'Water soup, can be chilled for hot days!'),
-    ('Broth Soup', 'A step up in Culinary prefection!');
+    ('Water Soup', 'Water soup, can be chilled for hot days!', 'Water soup, can be chilled for hot days!'),
+    ('Broth Soup', 'A step up in Culinary prefection!', 'A step up in Culinary prefection!');
 
 INSERT INTO recipe_step (recipe_id, step_id, info)
 VALUES

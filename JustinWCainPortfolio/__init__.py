@@ -1,10 +1,7 @@
 import os
 
 from markupsafe import Markup 
-from flask import Flask, send_file, url_for, redirect
-from werkzeug.security import check_password_hash, generate_password_hash
-
-
+from flask import Flask, url_for, redirect
 
 def create_app(test_config=None):
     # create and configure the app

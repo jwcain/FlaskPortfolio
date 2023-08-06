@@ -1,7 +1,7 @@
 import sqlite3
 
 import pytest
-from JustinWCainPortfolio.db import get_db
+from JustinWCainPortfolio.db import get_db, init_db
 
 
 def test_get_close_db(app):
@@ -13,6 +13,16 @@ def test_get_close_db(app):
         db.execute('SELECT 1')
 
     assert 'closed' in str(e.value)
+
+def test_init_admin_command(runner, app):
+    with app.app_context():
+        init_db()
+        db = get_db()
+        result = db.execute('SELECT * FROM user').fetchall()
+        assert len(result) == 0
+        runner.invoke(args=['init-admin', 'adminpass'])
+        result = db.execute('SELECT * FROM user').fetchall()
+        assert len(result) == 1
 
 
 def test_init_db_command(runner, monkeypatch):
