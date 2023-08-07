@@ -10,15 +10,21 @@
     <label for="shown">Shown</label><input type="checkbox" name="shown" id="shown" value="{{ request.form['shown'] or project['shown'] }}" {{ 'checked' if project['shown'] }} autocomplete="off">
     <label for="programming_language">Language</label><input name="programming_language" id="programming_language" value="{{ request.form['programming_language'] or project['programming_language'] }}">
     <label for="tools_used">Tools</label><input name="tools_used" id="tools_used" value="{{ request.form['tools_used'] or project['tools_used'] }}">
-    <label for="link_github">Github</label><input name="link_github" id="link_github" value="{{ request.form['link_github'] or project['link_github']}}">
-    <label for="link_live">Live Link</label><input name="link_live" id="link_live" value="{{ request.form['link_live'] or project['link_live'] }}">
     <label for="last_updated">Last Updated</label><input type="date" name="last_updated" id="last_updated" value="{{ request.form['last_updated'] or project['last_updated'] }}">
     <label for="info">Info</label>
     <textarea name="info" id="info">{{ request.form['info']  or project['info'] }}</textarea>
+    {% for link in links %}
+      <label for="link_{{link['id']}}_title">Title</label>
+      <input name="link_{{link['id']}}_title" id="link_{{link['id']}}_title" value="{{ request.form['link_{}_title'.format(link['id'])] or link['title'] }}" required>
+      <label for="link_{{link['id']}}_link">Link</label>
+      <input name="link_{{link['id']}}_link" id="link_{{link['id']}}_link" value="{{ request.form['link_{}_link'.format(link['id'])] or link['link'] }}" required>
+      <button class="danger "type="submit" value="DeleteLink" onclick="return confirm('Are you sure you want to delete this link?');" formaction="{{ url_for('portfolio.delete_project_link', project_id=project['id'], link_id=link['id']) }}">Delete Link</button><hr><br>
+    {% endfor %}
+    <button type="submit" value="AddLink" formaction="{{ url_for('portfolio.add_link_project', id=project['id']) }}">Add Link</button><hr><br>
     <input type="submit" value="Update">
   </form>
   <hr>
   <form action="{{ url_for('portfolio.delete_project', id=project['id']) }}" method="post">
-    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this WHOLE project?');">
   </form>
 {% endblock %}

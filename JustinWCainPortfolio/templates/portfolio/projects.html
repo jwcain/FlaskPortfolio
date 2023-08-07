@@ -9,20 +9,32 @@
 {% endblock %}
 
 {% block content %}
-  {% for project in projects %}
+  {% for project_tuple in project_link_tuple_set %}
+    {% set project = project_tuple[0] %}
+    {% set links = project_tuple[1] %}
     <article class="project">
       <header>
         <div>
-          <h1>{{ project['title'] }}{{ ' (Hidden)' if not project['shown']}}</h1>
-          {% if g.user %}
-              <a class="action" href="{{ url_for('portfolio.toggle_project', id=project['id']) }}">Toggle</a> 
-              <a class="action" href="{{ url_for('portfolio.update_project', id=project['id']) }}">Edit</a>
-          {% endif %}
+          <h1 class="title">{{ project['title'] }}{{ ' (Hidden)' if not project['shown']}}</h1>
+          <sub>Last Updated: {{project['last_updated']}}</sub>
         </div>
       </header>
-      <div class="about">{{ project['programming_language'] }} {{ project['tools_used'] }} {{ project['link_github'] }} {{ project['link_live'] }} {{ project['last_updated'] }}</div>
-      <p class="body">{{ project['info'] }}</p>
+      <br>
+      <div class="about">
+        {{ project['programming_language'] }}
+        {{ project['tools_used'] }}
+        <p class="body">{{ project['info'] }}</p>
+      </div>
+    {% for link in links %}
+    <div class="sidebyside">
+      <a class="button" href="{{link['link']}}">{{link['title']}}</a> 
+    </div>
+    {% endfor %}
     </article>
+    {% if g.user %}
+      <a class="action" href="{{ url_for('portfolio.toggle_project', id=project['id']) }}">Toggle</a> 
+      <a class="action" href="{{ url_for('portfolio.update_project', id=project['id']) }}">Edit</a>
+    {% endif %}
     {% if not loop.last %}
       <hr>
     {% endif %}

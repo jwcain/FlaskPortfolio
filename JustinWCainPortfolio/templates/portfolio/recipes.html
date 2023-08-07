@@ -9,18 +9,21 @@
 {% endblock %}
 
 {% block content %}
+<br>
   {% for recipe in recipes %}
-    <article class="recipeslist">
+    <article class="recipelist"> 
+      <a class="recipelink" href="{{ url_for('portfolio.show_recipe', id=recipe['id']) }}">
       <header>
         <div>
-          <h1><a class="action" href="{{ url_for('portfolio.show_recipe', id=recipe['id']) }}">{{ recipe['title'] }}</a></h1>
-          {% if g.user %}
-              <a class="action" href="{{ url_for('portfolio.update_recipe', id=recipe['id']) }}">Edit</a>
-          {% endif %}
+          <h1>{{ recipe['title'] }}</h1>
         </div>
       </header>
       <div class="about">{{ recipe['summary'] }}</div>
+    </a>
     </article>
+    {% if g.user %}
+      <br><a class="action" href="{{ url_for('portfolio.update_recipe', id=recipe['id']) }}">Edit</a>
+    {% endif %}
     {% if not loop.last %}
       <hr>
     {% endif %}

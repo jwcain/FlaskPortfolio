@@ -83,46 +83,13 @@ def test_delete_project(client, auth, app):
 
 def test_create_project(client, auth, app):
     auth.login()
-    assert client.get('/project/create').status_code == 200
-
-    client.post('/project/create', data={
-                'shown' : 1, 
-                'programming_language' : 'C#', 
-                'tools_used' : 'Unity', 
-                'title' : 'Random Game Dev', 
-                'info' : 'Lorem Ipsum', 
-                'link_github' : 'https://www.unity3d.com', 
-                'link_live' : 'https://www.justinwcain.com', 
-                'last_updated' : '2023-08-03' 
-    })
+    response = client.get('/project/create', follow_redirects=True)
+    assert response.status_code == 200
 
     with app.app_context():
         db = get_db()
         count = db.execute('SELECT COUNT(id) FROM project').fetchone()[0]
         assert count == 4
-
-    response = client.post('/project/create', data={
-                'shown' : 1, 
-                'programming_language' : 'C#', 
-                'tools_used' : 'Unity', 
-                'title' : '', 
-                'info' : 'Lorem Ipsum', 
-                'link_github' : 'https://www.unity3d.com', 
-                'link_live' : 'https://www.justinwcain.com', 
-                'last_updated' : '2023-08-03' 
-    })
-    assert re.search('Title is required.', response.get_data(as_text=True)) 
-    response = client.post('/project/create', data={
-                'shown' : 1, 
-                'programming_language' : 'C#', 
-                'tools_used' : 'Unity', 
-                'title' : 'title', 
-                'info' : '', 
-                'link_github' : 'https://www.unity3d.com', 
-                'link_live' : 'https://www.justinwcain.com', 
-                'last_updated' : '2023-08-03' 
-    })
-    assert re.search('Project Info is required.' , response.get_data(as_text=True))
 
 def test_update_project(client, auth, app):
     auth.login()
@@ -132,10 +99,12 @@ def test_update_project(client, auth, app):
                 'programming_language' : 'C#', 
                 'tools_used' : 'Unity', 
                 'title' : 'title_updated', 
-                'info' : '123123', 
-                'link_github' : 'https://www.unity3d.com', 
-                'link_live' : 'https://www.justinwcain.com', 
-                'last_updated' : '2023-08-03' 
+                'info' : '123123',  
+                'last_updated' : '2023-08-03',
+                'link_1_title' : 'Github',
+                'link_1_link' : 'github.com',
+                'link_2_title' : 'play now',
+                'link_2_link' : '\index'
     }, follow_redirects=True)
     assert response.status_code == 200
     with app.app_context():
@@ -148,22 +117,26 @@ def test_update_project(client, auth, app):
                 'programming_language' : 'C#', 
                 'tools_used' : 'Unity', 
                 'title' : '', 
-                'info' : 'Lorem Ipsum', 
-                'link_github' : 'https://www.unity3d.com', 
-                'link_live' : 'https://www.justinwcain.com', 
-                'last_updated' : '2023-08-03' 
-    })
+                'info' : '123123',  
+                'last_updated' : '2023-08-03',
+                'link_1_title' : 'Github',
+                'link_1_link' : 'github.com',
+                'link_2_title' : 'play now',
+                'link_2_link' : '\index'
+    }, follow_redirects=True)
     assert re.search('Title is required.', response.get_data(as_text=True)) 
     response = client.post('/project/update/1', data={
                 'shown' : 1, 
                 'programming_language' : 'C#', 
                 'tools_used' : 'Unity', 
-                'title' : 'title', 
-                'info' : '', 
-                'link_github' : 'https://www.unity3d.com', 
-                'link_live' : 'https://www.justinwcain.com', 
-                'last_updated' : '2023-08-03' 
-    })
+                'title' : 'title_updated', 
+                'info' : '',  
+                'last_updated' : '2023-08-03',
+                'link_1_title' : 'Github',
+                'link_1_link' : 'github.com',
+                'link_2_title' : 'play now',
+                'link_2_link' : '\index'
+    }, follow_redirects=True)
     assert re.search('Project Info is required.' , response.get_data(as_text=True))
 
 def test_create_recipe(client, auth, app):
@@ -268,3 +241,21 @@ def test_delete_ingredient_recipe(client, auth, app):
 def test_show_recipe(client):
     response = client.get("/recipe/show/1")
     assert response.status_code == 200
+
+def test_project_delete_link(client, app, auth):
+    auth.login()
+    with app.app_context():
+        db = get_db()
+        firstcount = db.execute('SELECT COUNT(id) FROM project_link').fetchone()[0]
+        response = client.post('/project/deletelink/1/1', follow_redirects=True)
+        secondcount = db.execute('SELECT COUNT(id) FROM project_link').fetchone()[0]
+        assert secondcount == firstcount - 1
+
+def test_project_add_link(client, app, auth):
+    auth.login()
+    with app.app_context():
+        db = get_db()
+        firstcount = db.execute('SELECT COUNT(id) FROM project_link').fetchone()[0]
+        response = client.post('/project/addlink/1', follow_redirects=True)
+        secondcount = db.execute('SELECT COUNT(id) FROM project_link').fetchone()[0]
+        assert secondcount == firstcount + 1

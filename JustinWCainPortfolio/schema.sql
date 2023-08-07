@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS recipe;
 DROP TABLE IF EXISTS recipe_step;
 DROP TABLE IF EXISTS recipe_ingredient;
 DROP TABLE IF EXISTS project;
+DROP TABLE IF EXISTS project_link;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,7 +44,13 @@ CREATE TABLE project (
   tools_used TEXT NOT NULL,
   title TEXT NOT NULL,
   info TEXT NOT NULL,
-  link_github TEXT NOT NULL,
-  link_live TEXT NOT NULL,
   last_updated DATE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE project_link (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  project_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  link TEXT NOT NULL,
+  FOREIGN KEY (project_id) REFERENCES project (id)
 );

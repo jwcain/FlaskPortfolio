@@ -22,50 +22,34 @@ def resume():
 #------------------------------------------------------------------------------ PROJECTS
 @bp.route('/projects')
 def projects():
-    db = get_db()
-    if g.user:
-        projects = db.execute(
-            'SELECT * FROM project'
-        ).fetchall()
-    else:
-        projects = db.execute(
-        'SELECT * FROM project WHERE shown = True'
-        ).fetchall()
-    return render_template('portfolio/projects.html', projects=projects)
+    project_link_tuple_set = get_project_link_tuple_set()
+    return render_template('portfolio/projects.html', project_link_tuple_set=project_link_tuple_set)
 
-@bp.route('/project/create', methods=('GET', 'POST'))
+@bp.route('/project/create', methods=('GET',))
 @login_required
 def create_project():
-    if request.method == 'POST':
-        shown = request.form['shown']
-        programming_language = request.form['programming_language']
-        tools_used = request.form['tools_used']
-        title = request.form['title']
-        info = request.form['info']
-        link_github = request.form['link_github']
-        link_live = request.form['link_live']
-        last_updated = request.form['last_updated']
-        error = None
+    db = get_db()
+    response = db.execute(
+        'INSERT INTO project (shown, programming_language, tools_used, title, info, last_updated)'
+        ' VALUES (?, ?, ?, ?, ?, ?)',
+        (1, '', '', '', '', '2023-08-01')
+    )
+    db.commit()
 
-        if not title:
-            error = 'Title is required.'
-        elif not info:
-            error = 'Project Info is required.'
+    return redirect(url_for('portfolio.update_project', id=response.lastrowid))
 
-        if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db.execute(
-                'INSERT INTO project (shown, programming_language, tools_used, title, info, link_github, link_live, last_updated)'
-                ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                (shown, programming_language, tools_used, title, info, link_github, link_live, last_updated)
-            )
-            db.commit()
-            flash('Project Added!')
-            return redirect(url_for('portfolio.projects'))
+@bp.route('/project/addlink/<int:id>', methods=('post',))
+@login_required
+def add_link_project(id):
+    db = get_db()
+    db.execute(
+        'INSERT INTO project_link (project_id, title, link)'
+        ' VALUES (?, ?, ?)',
+        (id, '','')
+    )
+    db.commit()
 
-    return render_template('portfolio/project/create.html')
+    return redirect(url_for('portfolio.update_project', id=id))
 
 def get_project(id):
     post = get_db().execute(
@@ -80,18 +64,38 @@ def get_project(id):
 
     return post
 
+def get_project_links(id):
+    return get_db().execute('SELECT * FROM project_link WHERE project_id = ?' , (id,)).fetchall()
+
+def get_project_link_tuple_set():
+    project_link_tuple_set= []
+    db = get_db()
+    if g.user:
+        projects = db.execute(
+            'SELECT * FROM project'
+        ).fetchall()
+    else:
+        projects = db.execute(
+        'SELECT * FROM project WHERE shown = True'
+        ).fetchall()
+    for project in projects:
+        project_links = get_project_links(project['id'])
+        project_link_tuple_set.append((project, project_links))
+
+    return project_link_tuple_set
+
+
 @bp.route('/project/update/<int:id>', methods=('GET', 'POST'))
 @login_required
 def update_project(id):
     project = get_project(id)
+    project_links = get_project_links(id)
     if request.method == 'POST':
         shown = 'shown' in request.form
         programming_language = request.form['programming_language']
         tools_used = request.form['tools_used']
         title = request.form['title']
         info = request.form['info']
-        link_github = request.form['link_github']
-        link_live = request.form['link_live']
         last_updated = request.form['last_updated']
         error = None
 
@@ -105,15 +109,23 @@ def update_project(id):
         else:
             db = get_db()
             db.execute(
-                'UPDATE project SET shown = ?, programming_language = ?, tools_used = ?, title = ?, info = ?, link_github = ?, link_live = ?, last_updated = ?'
+                'UPDATE project SET shown = ?, programming_language = ?, tools_used = ?, title = ?, info = ?, last_updated = ?'
                 'WHERE id = ?',
-                (shown, programming_language, tools_used, title, info, link_github, link_live, last_updated, id)
+                (shown, programming_language, tools_used, title, info, last_updated, id)
             )
+
+            links = get_project_links(id)
+            for link in links:
+                link_title = request.form['link_{}_title'.format(link['id'])]
+                link_link = request.form['link_{}_link'.format(link['id'])]
+                db.execute('UPDATE project_link SET title = ?, link = ? WHERE id= ?',
+                (link_title, link_link, link['id']))
+
             db.commit()
             flash('Project Updated')
             return redirect(url_for('portfolio.projects'))
 
-    return render_template('portfolio/project/update.html', project=project)
+    return render_template('portfolio/project/update.html', project=project,links=project_links)
 
 @bp.route('/project/toggle/<int:id>')
 @login_required
@@ -137,6 +149,14 @@ def delete_project(id):
     db.execute('DELETE FROM project WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('portfolio.projects'))
+
+@bp.route('/project/deletelink/<int:project_id>/<int:link_id>', methods=('POST',))
+@login_required
+def delete_project_link(project_id,link_id):
+    db = get_db()
+    db.execute('DELETE FROM project_link WHERE id = ?', (link_id,))
+    db.commit()
+    return redirect(url_for('portfolio.update_project', id=project_id))
 
 #-------------------------------------------------------------- Recipes
 @bp.route('/recipes')

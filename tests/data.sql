@@ -24,8 +24,14 @@ VALUES
     (2, 1, '1', 'Bowl'),
     (2, 2, 'Bowlfull', 'Broth');
 
-INSERT INTO project (shown, programming_language, tools_used, title, info, link_github, link_live, last_updated)
+INSERT INTO project (shown, programming_language, tools_used, title, info, last_updated)
 VALUES
-    (1, 'Python', 'Flask','Portfolio Website','Portfolio to show off my skills','githublink/index', '', '2023-08-01'),
-    (1, 'C#','Unity', 'Hexquisite', 'A hexagonal block puzzle game.','githublink/hexquisite', 'hex.play/live', '2023-08-01'),
-    (0, 'Java','', 'Java Tutorial Project', 'stadnard java tutorial','', '', '2017-08-01');
+    (1, 'Python', 'Flask','Portfolio Website','Portfolio to show off my skills', '2023-08-01'),
+    (1, 'C#','Unity', 'Hexquisite', 'A hexagonal block puzzle game.', '2023-08-01'),
+    (0, 'Java','', 'Java Tutorial Project', 'stadnard java tutorial', '2017-08-01');
+
+INSERT INTO project_link (project_id, title, link) 
+VALUES
+    (1, 'Github', '/index' ),
+    (2, 'Github', '/index'),
+    (2, 'Play Now', '/index');
