@@ -28,7 +28,7 @@ def test_admin_links(client, auth):
     assert b"Admin Log Out" in response.data
     assert b"Admin Change Password" in response.data
 
-def test_admin_edit(client, auth):
+def test_admin_edit_projects(client, auth):
     response = client.get('/projects')
     assert not b"Toggle" in response.data
     assert not b"Edit" in response.data
@@ -38,7 +38,7 @@ def test_admin_edit(client, auth):
     assert b"Toggle" in response.data
     assert b"Edit" in response.data
 
-def test_toggle(client, auth):
+def test_toggle_project(client, auth):
     #not logged in user cannot toggle
     response = client.get('/project/toggle/1')
     assert b"Redirecting..." in response.data
@@ -59,12 +59,10 @@ def test_toggle(client, auth):
     assert b"Java" in response.data
 
 
-def test_delete(client, auth, app):
+def test_delete_project(client, auth, app):
     #not logged in user cannot delete
     response = client.get('/project/delete/1')
     assert response.status_code == 405
-
-
 
     with app.app_context():
         db = get_db()
@@ -83,7 +81,7 @@ def test_delete(client, auth, app):
         thirdcount = db.execute('SELECT COUNT(id) FROM project').fetchone()[0]
     assert count == thirdcount + 1
 
-def test_create(client, auth, app):
+def test_create_project(client, auth, app):
     auth.login()
     assert client.get('/project/create').status_code == 200
 
@@ -126,7 +124,7 @@ def test_create(client, auth, app):
     })
     assert re.search('Project Info is required.' , response.get_data(as_text=True))
 
-def test_update(client, auth, app):
+def test_update_project(client, auth, app):
     auth.login()
     assert client.get('project/update/1').status_code == 200
     response = client.post('/project/update/1', data={
@@ -166,3 +164,55 @@ def test_update(client, auth, app):
                 'last_updated' : '2023-08-03' 
     })
     assert re.search('Project Info is required.' , response.get_data(as_text=True))
+
+def test_create_recipe(client, auth, app):
+    auth.login()
+    response = client.get('/recipe/create', follow_redirects=True)
+    assert response.status_code == 200
+    with app.app_context():
+        db = get_db()
+        count = db.execute('SELECT COUNT(id) FROM recipe').fetchone()[0]
+        assert count == 3
+
+def test_addstep_recipe(client, auth, app):
+    auth.login()
+    response = client.post('/recipe/addstep/1', follow_redirects=True)
+    assert response.status_code == 200
+
+def test_addingredient_recipe(client, auth, app):
+    auth.login()
+    response = client.post('/recipe/step/addingredient/1/1', follow_redirects=True)
+    assert response.status_code == 200
+
+
+def test_update_recipe(client, auth, app):
+    auth.login()
+    response = client.get('/recipe/update/500', follow_redirects=True)
+    assert response.status_code == 404
+
+    #Create a new recipe
+    response = client.post('recipe/update/1')
+    with app.app_context():
+        db = get_db()
+
+def test_delete_recipe(client, auth, app):
+        #not logged in user cannot delete
+    response = client.get('/recipe/delete/1')
+    assert response.status_code == 405
+    
+    with app.app_context():
+        db = get_db()
+        count = db.execute('SELECT COUNT(id) FROM recipe').fetchone()[0]
+
+    response = client.post('/project/delete/1')
+    with app.app_context():
+        db = get_db()
+        secondcount = db.execute('SELECT COUNT(id) FROM recipe').fetchone()[0]
+    assert count == secondcount
+
+    auth.login()
+    response = client.post('/recipe/delete/1')
+    with app.app_context():
+        db = get_db()
+        thirdcount = db.execute('SELECT COUNT(id) FROM recipe').fetchone()[0]
+    assert count == thirdcount + 1

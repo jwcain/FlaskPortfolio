@@ -160,17 +160,17 @@ def create_recipe():
     return redirect(url_for('portfolio.update_recipe', id=response.lastrowid))
 
 def get_recipe(id):
-    post = get_db().execute(
+    recipe = get_db().execute(
         'SELECT *'
         ' FROM recipe'
         ' WHERE id = ?',
         (id,)
     ).fetchone()
 
-    if post is None:
+    if recipe is None:
         abort(404, f"Recipe id {id} doesn't exist.")
 
-    return post
+    return recipe
 
 def get_recipe_contenttuple(recipe_id):
     step_ingredientlist_pair = []
@@ -185,12 +185,34 @@ def get_recipe_contenttuple(recipe_id):
     return (step_ingredientlist_pair, all_ingredients)
 
 
-@bp.route('/recipe/update/<int:id>')
+@bp.route('/recipe/update/<int:id>', methods=('POST', 'GET'))
 @login_required
 def update_recipe(id):
     recipe = get_recipe(id)
     if request.method == 'POST':
-        #TODO: Handle post
+        db = get_db()
+        recipe_title = request.form['title']
+        recipe_summary = request.form['summary']
+        recipe_info = request.form['info']
+
+        db.execute('UPDATE recipe SET title = ?, summary = ?, info = ? WHERE id= ?',
+        (recipe_title, recipe_summary, recipe_info, id))
+
+        steps = db.execute('SELECT * FROM recipe_step WHERE recipe_id = ?', (id,)).fetchall()
+        for step in steps:
+            step_info = request.form['step_{}'.format(step['id'])]
+            db.execute('UPDATE recipe_step SET info = ? WHERE id= ?',
+            (step_info, step['id']))
+
+            ingredients = db.execute('SELECT * FROM recipe_ingredient WHERE recipe_id = ? AND step_id = ?', (id, step['id'])).fetchall()
+            for ingredient in ingredients:
+                substring = 'step_{}_ingredient_{}'.format(step['id'], ingredient['id'])
+                ingredient_amount = request.form['{}_{}'.format(substring, 'amount')]
+                ingredient_name = request.form['{}_{}'.format(substring, 'name')]
+                db.execute('UPDATE recipe_ingredient SET amount = ?, ingredient_name = ? WHERE id= ?',
+                (ingredient_amount, ingredient_name , ingredient['id']))
+
+        db.commit()
         return redirect(url_for('portfolio.recipes'))
     contenttuple = get_recipe_contenttuple(id)
     return render_template('portfolio/recipe/update.html', recipe=recipe, step_ingredientlist_pair=contenttuple[0], all_ingredients=contenttuple[1])
@@ -209,8 +231,8 @@ def addstep_recipe(id):
 @login_required
 def addingredient_step_recipe(recipe_id, step_id):
     db = get_db()
-    db.execute('INSERT INTO recipe_ingredient (recipe_id, step_id, info) VALUES (?,?,?)',
-        (recipe_id,step_id,''))
+    db.execute('INSERT INTO recipe_ingredient (recipe_id, step_id, amount, ingredient_name) VALUES (?,?,?,?)',
+        (recipe_id,step_id,'',''))
     db.commit()
     return redirect(url_for('portfolio.update_recipe', id=recipe_id))
 
@@ -222,3 +244,22 @@ def delete_recipe(id):
     db.execute('DELETE FROM recipe WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('portfolio.recipes'))
+
+@bp.route('/recipe/deletestep/<int:recipe_id>/<int:step_id>', methods=('POST',))
+@login_required
+def delete_recipe_step(recipe_id, step_id):
+    get_recipe(recipe_id)
+    db = get_db()
+    db.execute('DELETE FROM recipe_step WHERE id = ?', (step_id,))
+    db.execute('DELETE FROM recipe_ingredient WHERE step_id = ?', (step_id,))
+    db.commit()
+    return redirect(url_for('portfolio.update_recipe', id=recipe_id))
+
+@bp.route('/recipe/deleteingredient/<int:recipe_id>/<int:ingredient_id>', methods=('POST',))
+@login_required
+def delete_recipe_ingredient(recipe_id, ingredient_id):
+    get_recipe(recipe_id)
+    db = get_db()
+    db.execute('DELETE FROM recipe_ingredient WHERE id = ?', (ingredient_id,))
+    db.commit()
+    return redirect(url_for('portfolio.update_recipe', id=recipe_id))
