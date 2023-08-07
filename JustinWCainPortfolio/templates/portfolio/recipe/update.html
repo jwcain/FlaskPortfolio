@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form method="post">
+    <label for="title">Title</label><input name="title" id="title" value="{{ request.form['title'] or recipe['title'] }}" required>
+    <label for="summary">Summary</label><input name="summary" id="summary" value="{{ request.form['summary'] or recipe['summary'] }}" required>
+    <label for="info">Info</label>
+    <textarea name="info" id="info">{{ request.form['info']  or recipe['info'] }}</textarea>
+    {% for step_ingredients_pair in step_ingredientlist_pair %}
+      {% set step = step_ingredients_pair[0] %}
+      {% set ingredients = step_ingredients_pair[1] %}
+      {% set outer_loop = loop %}
+      <label for="info_step_{{loop.index}}">{{ 'Step {index}:'.format(index=loop.index) }} </label>
+      <textarea name="step_{{loop.index}}" id="step_{{loop.index}}">{{ request.form['info']  or step['info'] }}</textarea>
+      {% for ingredient in ingredients %}
+        {% set n = 'step_{}_ingredient_{}'.format(outer_loop.index, loop.index) %}
+        <label for="{{n+'_amount'}}">{{ 'Ingredient {index} amount:'.format(index=loop.index) }} </label>
+        <input name="{{n+'_amount'}}" id="{{n+'_amount'}}" value="{{ request.form[n+'_amount'] or ingredient['amount'] }}" required>
+        <label for="{{n+'_name'}}">{{ 'Ingredient {index} name:'.format(index=loop.index) }} </label>
+        <input name="{{n+'_name'}}" id="{{n+'_name'}}" value="{{ request.form[n+'_name'] or ingredient['ingredient_name'] }}" required>
+      {% endfor %}
+      <button type="submit" value="AddIngredient_step_{{loop.index}}" formaction="{{ url_for('portfolio.addingredient_step_recipe', recipe_id=step['recipe_id'], step_id=step['id']) }}">Add Ingredient</button>
+      <br><hr><br>
+    {% endfor %}
+    <button type="submit" value="AddStep" formaction="{{ url_for('portfolio.addstep_recipe', id=recipe['id']) }}">Add Step</button><hr><br>
+    <button type="submit" value="Submit">Update</button>
+  </form>
+  <hr>
+  <form action="{{ url_for('portfolio.delete_recipe', id=recipe['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}

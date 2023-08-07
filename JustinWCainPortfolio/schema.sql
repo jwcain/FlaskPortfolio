@@ -21,7 +21,7 @@ CREATE TABLE recipe (
 CREATE TABLE recipe_step (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   recipe_id INTEGER NOT NULL,
-  step_id INTEGER NOT NULL,
+  step_order INTEGER NOT NULL,
   info TEXT NOT NULL,
   FOREIGN KEY (recipe_id) REFERENCES recipe (id)
 );

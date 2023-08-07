@@ -8,13 +8,13 @@ VALUES
     ('Water Soup', 'Water soup, can be chilled for hot days!', 'Water soup, can be chilled for hot days!'),
     ('Broth Soup', 'A step up in Culinary prefection!', 'A step up in Culinary prefection!');
 
-INSERT INTO recipe_step (recipe_id, step_id, info)
+INSERT INTO recipe_step (recipe_id, step_order, info)
 VALUES
     (1, 1, 'Collect a Bowl'),
     (1, 2, 'Fill it with water'),
     (1, 3, 'Optional: Add Ice'),
-    (1, 1, 'Collect a Bowl'),
-    (1, 2, 'Fill it with broth');
+    (2, 1, 'Collect a Bowl'),
+    (2, 2, 'Fill it with broth');
 
 INSERT INTO recipe_ingredient (recipe_id, step_id, amount, ingredient_name)
 VALUES
