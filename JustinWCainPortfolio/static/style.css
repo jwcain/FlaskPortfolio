@@ -126,19 +126,22 @@ a {
 
 hr {
     border: none;
-    border-top: 1px solid var(--celadon);
+    border-top: 1px solid var(--cadet);
 }
 
 nav {
     background: var(--cerulean);
     display: flex;
     align-items: center;
-    padding: 0 0.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 960px;
+    justify-content: center;
 }
 
 nav h1 {
     flex: auto;
-    margin: 0;
+
     color: var(--harvest);
 }
 
@@ -155,7 +158,7 @@ nav ul {
 }
 
 nav ul li a, nav ul li span .action {
-    display: block;
+    display: inline-block;
     padding: 0.5rem;
     color: var(--harvest);
 }
@@ -171,8 +174,9 @@ nav ul li a, nav ul li span .action {
 }
 .button:hover,
 .button:focus {
-  background-color: var(--celadon);
+  background-color: var(--cadet);
   border-color: #7aa8b7;
+  border-radius: 5px;
 }
 
 header a {
@@ -186,6 +190,14 @@ header a:hover,  a:focus {
 
 .content {
     padding: 0 1rem 1rem;
+}
+
+.white {
+    color: white;
+}
+
+.yellow {
+    color: var(--harvest);
 }
 
 .content>header {
@@ -241,6 +253,13 @@ input[type=submit] {
 
 .recipelist {
     padding:  .5em .5em;
+}
+
+.siteheader li {
+    display: inline-block;
+    margin-top: -1em;
+    margin-bottom: -1em;
+    padding: 0%;
 }
 
 .recipelist .about {
@@ -317,4 +336,26 @@ input[type=submit] {
 .recipe .stepingredient {
     font-size: small;
     margin-left: 3em;
+}
+
+nav img {
+    max-height: 64px;
+    max-width: 64px;
+}
+
+
+/*MEDIA QUERY*/
+@media only screen and (max-width : 800px) {
+    .siteheader li {
+        display: block;
+        margin-left: 0%;
+    }
+
+	nav ul, nav:active ul { 
+		display: inline-block;
+        vertical-align: middle;
+	}
+    nav img {
+        display: none;
+    }
 }

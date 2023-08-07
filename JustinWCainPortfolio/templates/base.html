@@ -2,15 +2,24 @@
 <title>{% block title %}{% endblock %}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
-  <h1>Portfolio</h1>
-  <ul>
-    <li><a class="button" href="{{ url_for('portfolio.index') }}">Home</a>
-    <li><a class="button" href="{{ url_for('portfolio.projects') }}">Projects</a>
-    <li><a class="button" href="{{ url_for('portfolio.recipes') }}">Recipes</a>
-    <li><a class="button" href="{{ url_for('portfolio.resume') }}" target="_blank">Resume</a>
-    <li><a class="button" href="https://www.linkedin.com/in/cainj" target="_blank">LinkedIn</a>
-    <li><a class="button" href="https://github.com/jwcain" target="_blank">GitHub</a>
-  </ul>
+  <img src="{{url_for('static', filename='TriHex.png')}}" alt="">
+  <ol>
+    <ol>
+      <h1 class="siteheader">
+        <li><p class="white">Justin W Cain</p>
+        <li><p class="yellow"></p>Portfolio</p>
+      </h1>
+    </ol>
+    <hr>
+    <ul class="navlinks">
+      <li><a class="button" href="{{ url_for('portfolio.index') }}">Home</a></li>
+      <li><a class="button" href="{{ url_for('portfolio.projects') }}">Projects</a></li>
+      <li><a class="button" href="{{ url_for('portfolio.recipes') }}">Recipes</a></li>
+      <li><a class="button" href="{{ url_for('portfolio.resume') }}" target="_blank">Resume</a></li>
+      <li><a class="button" href="https://www.linkedin.com/in/cainj" target="_blank">LinkedIn</a></li>
+      <li><a class="button" href="https://github.com/jwcain" target="_blank">GitHub</a></li>
+    </ul>
+</ol>
 </nav>
 <section class="content">
   {% for message in get_flashed_messages() %}

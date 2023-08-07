@@ -1,4 +1,4 @@
-Hi, I am Justin! I am a Michigan Technological University graduate with a B.S. in Software Engineering and an aspiration to work on projects that have a meaningful impact on its users, either as media experiences or as usefool tools! You can find some example projects outlined below, and a link to my resume above. As an avid baker, you can also find some of my recipes below!
+Hi, I am Justin! I am a Michigan Technological University graduate with a B.S. in Software Engineering and an aspiration to work on projects that have a meaningful impact on its users, either as media experiences or as usefool tools! Here you can find info on my projects, links to my LinkedIn and GitHub, and as an avid baker, some of my recipes!
 <br><br>
 My first three years post-grad where working with Sonalysts on BlackHorizon, a serious-game/training simulator for AirFore and SpaceForce to learn orbital mechanics and practice potential satellite operations. I worked on the project’s software architecture, built the project for iOS/Android/Desktop, and worked on custom developer tools for the team to speed up development.
 <br><br>
