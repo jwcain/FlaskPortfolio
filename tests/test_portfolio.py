@@ -136,7 +136,8 @@ def test_update_project(client, auth, app):
                 'link_github' : 'https://www.unity3d.com', 
                 'link_live' : 'https://www.justinwcain.com', 
                 'last_updated' : '2023-08-03' 
-    })
+    }, follow_redirects=True)
+    assert response.status_code == 200
     with app.app_context():
         db = get_db()
         project = db.execute('SELECT * FROM project WHERE id = 1').fetchone()
@@ -191,9 +192,32 @@ def test_update_recipe(client, auth, app):
     assert response.status_code == 404
 
     #Create a new recipe
-    response = client.post('recipe/update/1')
     with app.app_context():
         db = get_db()
+        recipe_id = 1 + db.execute('SELECT COUNT(id) FROM recipe').fetchone()[0] 
+        response = client.get('recipe/create/', follow_redirects=True)
+        assert response.status_code == 200
+        assert db.execute('SELECT COUNT(id) FROM recipe').fetchone()[0] == recipe_id
+        response = client.post('/recipe/addstep/{}'.format(recipe_id), follow_redirects=True)
+        assert db.execute('SELECT COUNT(id) FROM recipe_step WHERE recipe_id = ?', (recipe_id,)).fetchone()[0] == 1
+        response = client.post('/recipe/step/addingredient/{}/{}'.format(recipe_id, 6), follow_redirects=True)
+        assert db.execute('SELECT COUNT(id) FROM recipe_ingredient WHERE recipe_id = ?', (recipe_id,)).fetchone()[0] == 1
+
+        response = client.post('/recipe/update/{}'.format(recipe_id), data={
+            'title' : 'Filled Title', 
+            'summary' : 'Filled summary',
+            'info' : 'Filled Info',
+            'step_6' : 'STEP_INFO',
+            'step_6_ingredient_6_amount' : 'Filled amount',
+            'step_6_ingredient_6_name' : 'INGREDIENT_NAME'
+        }, follow_redirects=True)
+        assert response.status_code == 200
+        assert db.execute('SELECT * FROM recipe_step WHERE recipe_id = ?', (recipe_id,)).fetchone()['info'] == 'STEP_INFO'
+        assert db.execute('SELECT * FROM recipe_ingredient WHERE recipe_id = ? AND step_id = 6', (recipe_id,)).fetchone()['ingredient_name'] == 'INGREDIENT_NAME'
+
+
+
+
 
 def test_delete_recipe(client, auth, app):
         #not logged in user cannot delete
@@ -216,3 +240,27 @@ def test_delete_recipe(client, auth, app):
         db = get_db()
         thirdcount = db.execute('SELECT COUNT(id) FROM recipe').fetchone()[0]
     assert count == thirdcount + 1
+
+def test_delete_step_recipe(client, auth, app):
+    #/recipe/deletestep/<int:recipe_id>/<int:step_id>
+    response = client.get('/recipe/deletestep/1/1', follow_redirects=True)
+    assert response.status_code == 405
+    auth.login()
+    with app.app_context():
+        db = get_db()
+        firstcount = db.execute('SELECT COUNT(id) FROM recipe_step').fetchone()[0]
+        response = client.post('/recipe/deletestep/1/1', follow_redirects=True)
+        secondcount = db.execute('SELECT COUNT(id) FROM recipe_step').fetchone()[0]
+        assert secondcount == firstcount - 1
+
+def test_delete_ingredient_recipe(client, auth, app):
+    #/recipe/deleteingredient/<int:recipe_id>/<int:ingredient_id>
+    response = client.get('/recipe/deleteingredient/1/1', follow_redirects=True)
+    assert response.status_code == 405
+    auth.login()
+    with app.app_context():
+        db = get_db()
+        firstcount = db.execute('SELECT COUNT(id) FROM recipe_ingredient').fetchone()[0]
+        response = client.post('/recipe/deleteingredient/1/1', follow_redirects=True)
+        secondcount = db.execute('SELECT COUNT(id) FROM recipe_ingredient').fetchone()[0]
+        assert secondcount == firstcount - 1
