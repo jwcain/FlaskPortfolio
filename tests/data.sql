@@ -21,8 +21,8 @@ VALUES
     (1, 1, '1', 'Bowl'),
     (1, 2, 'Bowlfull', 'Water'),
     (1, 3, 'Handfull', 'Ice'),
-    (2, 1, '1', 'Bowl'),
-    (2, 2, 'Bowlfull', 'Broth');
+    (2, 4, '1', 'Bowl'),
+    (2, 5, 'Bowlfull', 'Broth');
 
 INSERT INTO project (shown, programming_language, tools_used, title, info, last_updated)
 VALUES

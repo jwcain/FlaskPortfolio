@@ -199,90 +199,6 @@ header a:hover,  a:focus {
     margin: 1rem 0 0.25rem 0;
 }
 
-.flash {
-    margin: 1em 0;
-    padding: 1em;
-    background: #cae6f6;
-    border: 1px solid var(--cerulean);
-}
-
-.recipelist {
-    padding:  .5em .5em;
-}
-
-.recipelist .about {
-    color: var(--cadet);
-    font-style: italic;
-    padding:  0em 1em;
-}
-
-.recipelist .recipelink {
-    text-decoration: none;
-}
-
-.recipelist h1 {
-    margin-top: 0em;
-}
-
-.recipelist:hover,
-.recipelist:focus {
-  background-color: lightgray;
-  border-color: #7aa8b7;
-}
-
-
-.project {
-    padding:  .5em .5em;
-    
-}
-
-.project .about {
-    color: var(--cadet);
-}
-
-.project .title {
-    color: var(--cerulean);
-    margin-bottom: -.25em;
-}
-.project sub {
-    color: var(--cerulean);
-    margin-left: 1em;
-}
-
-.project .sidebyside {
-    display: inline-block;
-    margin-left: auto; 
-    margin-right: 1em;
-}
-
-
-
-
-
-.post>header {
-    display: flex;
-    align-items: flex-end;
-    font-size: 0.85em;
-}
-
-.post>header>div:first-of-type {
-    flex: auto;
-}
-
-.post>header h1 {
-    font-size: 1.5em;
-    margin-bottom: 0;
-}
-
-.post .about {
-    color: slategray;
-    font-style: italic;
-}
-
-.post .body {
-    white-space: pre-line;
-}
-
 .content:last-child {
     margin-bottom: 0;
 }
@@ -314,4 +230,91 @@ input.danger {
 input[type=submit] {
     align-self: start;
     min-width: 10em;
+}
+
+.flash {
+    margin: 1em 0;
+    padding: 1em;
+    background: #cae6f6;
+    border: 1px solid var(--cerulean);
+}
+
+.recipelist {
+    padding:  .5em .5em;
+}
+
+.recipelist .about {
+    color: var(--cadet);
+    font-style: italic;
+    padding:  0em 1em;
+}
+
+.recipelist .recipelink {
+    text-decoration: none;
+}
+
+.recipelist h1 {
+    margin-top: 0em;
+}
+
+.recipelist:hover,
+.recipelist:focus {
+  background-color: lightgray;
+  border-color: #7aa8b7;
+}
+
+.project {
+    padding:  .5em .5em;
+    
+}
+
+.project .about {
+    color: var(--cadet);
+}
+
+.project .title {
+    color: var(--cerulean);
+    margin-bottom: -.25em;
+}
+.project sub {
+    color: var(--cerulean);
+    margin-left: 1em;
+}
+
+.project .sidebyside {
+    display: inline-block;
+    margin-left: auto; 
+    margin-right: 1em;
+}
+
+.recipe li {
+    margin-top: 0em;
+    margin-left: 2em;
+}
+
+.recipe li {
+    margin-top: 0em;
+    margin-left: 2em;
+    font-style: italic;
+    list-style-type: none;
+}
+
+.recipe h4 {
+    margin-top: 0em;
+    margin-bottom: 0em;
+}
+
+.recipe .recap {
+    font-style: italic;
+    font-size: small;
+    margin-left: 2em;
+}
+
+.recipe .title {
+    font-size: xx-large;
+}
+
+.recipe .stepingredient {
+    font-size: small;
+    margin-left: 3em;
 }
