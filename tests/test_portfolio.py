@@ -264,3 +264,7 @@ def test_delete_ingredient_recipe(client, auth, app):
         response = client.post('/recipe/deleteingredient/1/1', follow_redirects=True)
         secondcount = db.execute('SELECT COUNT(id) FROM recipe_ingredient').fetchone()[0]
         assert secondcount == firstcount - 1
+
+def test_show_recipe(client):
+    response = client.get("/recipe/show/1")
+    assert response.status_code == 200

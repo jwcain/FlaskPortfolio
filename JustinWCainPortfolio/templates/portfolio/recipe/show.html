@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{recipe['title']}}</h1>
+    <p>{{recipe['summary']}}</p>
+    <body>{{recipe['info']}}</body>
+    <h2>Ingredients</h2>
+    {% for ingredient in all_ingredients %}
+        <li>{{'{} | {}'.format(ingredient['amount'], ingredient['ingredient_name'])}}</li>
+    {% endfor %}
+    <hr>
+    {% for step_ingredients_pair in step_ingredientlist_pair %}
+    {% set step = step_ingredients_pair[0] %}
+    {% set ingredients = step_ingredients_pair[1] %}
+    <h1>{{'Step {}:'.format(loop.index)}}</h1>
+    <p>{{step['info']}}</p>
+    <h3>Ingredients used in this Step:</h3>
+    {% for ingredient in ingredients %}
+        <li>{{'{} | {}'.format(ingredient['amount'], ingredient['ingredient_name'])}}</li>
+    {% endfor %}
+    {% if not loop.last %}
+    <hr>
+    {% endif %}
+    {% endfor %}
+{% endblock %}

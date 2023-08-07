@@ -185,6 +185,13 @@ def get_recipe_contenttuple(recipe_id):
     return (step_ingredientlist_pair, all_ingredients)
 
 
+@bp.route('/recipe/show/<int:id>', methods=('GET',))
+def show_recipe(id):
+    recipe = get_recipe(id)
+    contenttuple = get_recipe_contenttuple(id)
+    return render_template('portfolio/recipe/show.html', recipe=recipe, step_ingredientlist_pair=contenttuple[0], all_ingredients=contenttuple[1])
+
+
 @bp.route('/recipe/update/<int:id>', methods=('POST', 'GET'))
 @login_required
 def update_recipe(id):
