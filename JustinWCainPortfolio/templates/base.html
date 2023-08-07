@@ -2,8 +2,9 @@
 <title>{% block title %}{% endblock %}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
-  <h1><a href="{{ url_for('portfolio.index') }}">Portfolio</a></h1>
+  <h1>Portfolio</h1>
   <ul>
+    <li><a href="{{ url_for('portfolio.index') }}">Home</a>
     <li><a href="{{ url_for('portfolio.projects') }}">Projects</a>
     <li><a href="{{ url_for('portfolio.resume') }}" target="_blank">Resume</a>
     <li><a href="{{ url_for('portfolio.recipes') }}">Recipes</a>
